@@ -1,0 +1,92 @@
+<div class="container">
+    <h1 class="text-center">Welcome to Coda Global Front end challengw</h1>
+    <h3 class="text-center">
+        Instructions -
+    </h3>
+    <p class="text-justify">
+        <ol>
+            <li>
+                List is fetched from firebase database where the data is stored.
+            </li>
+            <li>Select 9 players from the below list</li>
+            <li>Once 9 players have been selected you will be taken to a different table where only 9 people will be there & 
+                a random number generator button at the top.
+            </li>
+            <li>
+                Once the button is clicked based on number generated the wins, loss & price  will be updated in the table.
+            </li>
+            <li>
+                if you want to remove any player from the pool of 9 players there is a button to remove them. 
+                once removed you can add another player(this can happen once per player).
+            </li>
+            <li>
+                Table is sorted in order of price then Wins, then value of bet.(no api calling is doen again)
+            </li>
+            <li>
+                there is a search box to search for name of players. (no api calling is doen again)
+            </li>
+        </ol>
+    <!-- </p> -->
+</div>
+<div class="container col-md-12" *ngIf="bets && selectedPlayers.length!=9; else elseblock">
+    <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="on" placeholder="&#61442;  Start searching name">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Select</th>
+                <th>Player Name</th>
+                <th>Avatar</th>
+                <th>Bet</th>
+                <th>Wins</th>
+                <th>Loss</th>
+                <th>Price</th>
+            </tr>
+            <tr *ngFor="let bet of bets|filter:searchText">
+                <td>
+                    <input type="checkbox" id="bet.name" value="off" #inputValue (change)="getSelectedName(bet,inputValue.value)">
+                </td>
+                <td> {{bet.name}} </td>
+                <td> <img class="img-responsive" width="100" height="100" src="{{bet.photo}}" ></td>
+                <td> {{bet.bet}} </td>
+                <td> {{bet.wins}} </td>
+                <td> {{bet.loss}} </td>
+                <td> {{bet.price}} </td>
+            </tr>
+        </table>
+    </div>
+  
+</div>
+<ng-template #elseblock>
+    <div class="container" *ngIf="selectedPlayers.length==9">
+        <div class="col-md-12">
+            <button (click)="genRndNum()" class="btn btn-primary">Random Number genrator</button>
+            <p class="display-4" *ngIf="randomNumber">
+                Opposing Bet - {{randomNumber}}
+            </p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Player Name</th>
+                    <th>Avatar</th>
+                    <th>Bet</th>
+                    <th>Wins</th>
+                    <th>Loss</th>
+                    <th>Price</th>
+                    <th>Remove player from Selected List</th>
+                </tr>
+                <tr *ngFor="let bet of selectedPlayers">
+                    <td> {{bet.name}} </td>
+                    <td> <img class="img-responsive" width="100" height="100" src="{{bet.photo}}" ></td>
+                    <td> {{bet.bet}} </td>
+                    <td> {{bet.wins}} </td>
+                    <td> {{bet.loss}} </td>
+                    <td> {{bet.price}} </td>
+                    <td>
+                        <button class="btn btn-danger" id="rel" (click)= "DeletePlayer(bet.id)">Remove from playing 9</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</ng-template>
